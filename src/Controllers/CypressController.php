@@ -25,7 +25,7 @@ class CypressController
             ->keyBy('name');
     }
 
-    public function login(Request $request)
+    public function login(Request $request, $guard = null)
     {
         $attributes = $request->input('attributes', []);
 
@@ -50,8 +50,8 @@ class CypressController
 
         $user->load($request->input('load', []));
 
-        return tap($user, function ($user) {
-            auth()->login($user);
+        return tap($user, function ($user) use($guard) {
+            auth($guard)->login($user);
 
             $user->setHidden([])->setVisible([]);
         });
